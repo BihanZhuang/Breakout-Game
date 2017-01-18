@@ -1,10 +1,8 @@
 package breakout;
 
-import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.util.Duration;
 
 public class Paddle extends ImageView {
 	public static final String PADDLE = "paddle.gif";
@@ -47,9 +45,11 @@ public class Paddle extends ImageView {
 		int ret = 1;
 		if (obj.getX() >= getX() && obj.getX() < (getX() + getBoundsInLocal().getWidth()/5)){
 			ret = 1;
-		} else if (obj.getX() >= (getX() + getBoundsInLocal().getWidth()/5) && obj.getX() < (getX() + 4*getBoundsInLocal().getWidth()/5)) {
+		} else if (obj.getX() >= (getX() + getBoundsInLocal().getWidth()/5) && 
+				   obj.getX() < (getX() + 4*getBoundsInLocal().getWidth()/5)) {
 			ret = 2;
-		} else if (obj.getX() > (getX() + 4*getBoundsInLocal().getWidth()/5) && obj.getX() < (getX() + getBoundsInLocal().getWidth())){
+		} else if (obj.getX() > (getX() + 4*getBoundsInLocal().getWidth()/5) && 
+				   obj.getX() < (getX() + getBoundsInLocal().getWidth())){
 			ret = 3;
 		}
 		return ret;

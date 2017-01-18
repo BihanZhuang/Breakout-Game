@@ -37,21 +37,17 @@ public class BreakoutMain extends Application {
 	public static final int NUMBER_BLOCKS = 6;
 	public static final int NUMBER_LAYERS = 8;
 	
-	private Scene welcome, level1, level2, level3, level4, help;
-	private Paddle p = new Paddle();
-	private Ball[] balls = new Ball[3];
-	private ArrayList<Laser> myLasers = new ArrayList<Laser>();
-	private int numBouncers = 1;
+	private Scene welcome, help, level1, level2, level3, level4;
 	private Group root1, root2, root3, root4;
-	private boolean shoot, launchBall;
-	private ArrayList<Blocks> myBlocks = new ArrayList<Blocks>();
-	
+	private LevelGenerator myLevelMaster;
+	private int currentLevel;
 
 	@Override
 	public void start(Stage s) {
 		makeWelcomeScene(s);
 		makeHelpScene(s);
-		makeLevelOne(s);
+		//makeLevelOne(s);
+		initialize();
 		
 		s.setResizable(false);
 		s.setScene(welcome);
@@ -72,7 +68,7 @@ public class BreakoutMain extends Application {
 	
 	// Main game loop
 	private void loop(){
-		levelOneLoop();
+		myLevelMaster.step(SECOND_DELAY);
 	}
 	
 	// Main method to make the welcome scene 
@@ -158,128 +154,11 @@ public class BreakoutMain extends Application {
 		help = new Scene(vbox, W, H, BACKGROUND);
 	}
 	
-	// Method to make the level1 scene
-	private void makeLevelOne(Stage s){
+	private void initialize(){
+		myLevelMaster  = new LevelGenerator();
+		currentLevel = 1;
 		root1 = new Group();
 		level1 = new Scene(root1, W, H, BACKGROUND);
-		
-		balls[0] = new Ball(level1);
-		
-		setBlockConfigL1();
-    	
-    	root1.getChildren().add(balls[0]);
-    	root1.getChildren().add(p);
-    	root1.getChildren().addAll(myBlocks);
-    	
-    	level1.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-
-	}
-	
-	// Loop for level 1
-	private void levelOneLoop(){
-		double radius = balls[0].getBoundsInLocal().getWidth()/2;
-		if (launchBall){
-			for (int i=0; i<numBouncers; i++){
-				balls[i].bounce(level1, radius);
-				if (balls[i].getBoundsInLocal().intersects(p.getBoundsInLocal())){
-					int region = p.checkRegion(balls[i]);
-					if (region == 1 || region == 3) {
-						balls[i].dx *= -1;
-					}
-					balls[i].dy *= -1;
-				}
-				ArrayList<Blocks> removeList = new ArrayList<Blocks>();
-				for (int j=0; j<myBlocks.size(); j++){
-					Blocks b = myBlocks.get(j);
-					if (balls[i].getBoundsInLocal().intersects(b.getBoundsInLocal())){
-						balls[i].dy *= -1;
-						root1.getChildren().remove(b);
-						removeList.add(b);
-					}
-				}	
-				myBlocks.removeAll(removeList);
-			}
-			
-			if (shoot){
-				for (int i=0; i<myLasers.size(); i++){
-					myLasers.get(i).shoot(SECOND_DELAY);
-				}
-			}
-			
-		}
-	}
-	
-	// Algorithmically generate different block configurations
-	private void setBlockConfigL1(){
-		for (int i=0; i<NUMBER_BLOCKS; i++){
-			for (int j=0; j<NUMBER_LAYERS; j++){
-				Blocks b = new Blocks();
-				b.setX(i*b.getBoundsInLocal().getWidth());
-				b.setY(80 + j*b.getBoundsInLocal().getHeight());
-				myBlocks.add(b);
-			}
-		}
-	}
-	
-	
-	// Method to make the level 2 scene
-	private void makeLevelTwo(){
-		
-	}
-	
-	// Loop for level 2
-	private void levelTwoLoop(){
-		
-	}
-	
-	private boolean laserpu = true;
-	
-	// Main method to handle key input
-	private void handleKeyInput(KeyCode code){
-		p.handleKeyInput(code);
-		
-		if (code == KeyCode.SPACE){
-			launchBall = true;
-		}
-		
-		if (code == KeyCode.L && laserpu ){
-			PauseTransition delay = new PauseTransition(Duration.seconds(5));
-			delay.setOnFinished(e -> laserpu = false);
-			delay.play();
-			Laser l = new Laser(p.getX()+p.getBoundsInLocal().getWidth()/2, p.getY()-p.getBoundsInLocal().getHeight()*1.5);
-			myLasers.add(l);
-			root1.getChildren().add(l);
-			shoot = true;
-		}	
-	}
-	
-	private void takePowerUp(int optionNum){
-		if (optionNum == 0){
-			PauseTransition delay = new PauseTransition(Duration.seconds(5));
-			delay.setOnFinished(e -> p.normalLength());
-			delay.play();
-			p.doubleLength();
-		} else if (optionNum == 1){
-			PauseTransition delay = new PauseTransition(Duration.seconds(5));
-			delay.setOnFinished(e -> {
-				for (Ball b : balls){
-					b.increaseVelocity();
-				}
-			});
-			delay.play();
-			for (Ball b : balls){
-				b.decreaseVelocity();
-			}
-		} else if (optionNum == 3){
-			PauseTransition delay = new PauseTransition(Duration.seconds(5));
-			delay.setOnFinished(e -> p.normalLength());
-			delay.play();
-			p.halveLength();
-		} else if (optionNum == 4){
-			PauseTransition delay = new PauseTransition(Duration.seconds(2));
-			delay.setOnFinished(e -> p.freeze = false);
-			delay.play();
-			p.freeze = true;
-		}
+		myLevelMaster.makeLevel(level1, root1, currentLevel);
 	}
 }

@@ -10,6 +10,10 @@ public class Ball extends ImageView{
 	public static final int FRAMES_PER_SECOND = 60;
 	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 	public double dx, dy;
+	public static final int DIFF = 50;
+	
+	private double angle = 0.25*Math.PI + 0.5*Math.PI*Math.random();
+	private int speed = BOUNCER_SPEED;
 	
 	public Ball(Scene scene){
 		super();
@@ -17,19 +21,16 @@ public class Ball extends ImageView{
 		setImage(image);
 		setX(200);
     	setY(465);
-        double angle = 0.25*Math.PI + 0.5*Math.PI*Math.random();
-    	dx = Math.cos(angle) * BOUNCER_SPEED;
-    	dy = Math.sin(angle) * BOUNCER_SPEED;
+    	dx = Math.cos(angle) * speed;
+    	dy = Math.sin(angle) * speed;
 	}
 	
 	public void decreaseVelocity(){
-		dx *= 0.8;
-		dy *= 0.8;
+		speed -= DIFF;
 	}
 	
 	public void increaseVelocity(){
-		dx *= 1.2;
-		dy *= 1.2;
+		speed += DIFF;
 	}
 	
 	public void bounce(Scene scene, double radius){
@@ -41,5 +42,13 @@ public class Ball extends ImageView{
 		} 
 		setX(getX() + dx * SECOND_DELAY);
 		setY(getY() + dy * SECOND_DELAY);
+	}
+	
+	public void reverseX(){
+		dx *= -1;
+	}
+	
+	public void reverseY(){
+		dy *= -1;
 	}
 }

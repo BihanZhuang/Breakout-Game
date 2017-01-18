@@ -24,10 +24,10 @@ II. Levels:
    			pass the level). One ball. "Stations" will be present.
    			
 -- Level 3: Blocks with "rocks" among them (different configuration). Three balls will be present and their speed will be 
-            increased. At any moment keep at least one ball alive. "Stations" will be present.
+            increased. At any moment keep at least one ball alive. "Stations" and "aliens" will be present.
             
 -- Level 4: Block with "rocks" (different configuration). Three balls will be present and their speed will be increased from
-			Level 3. At any moment keep at least one ball alive. "Stations" and "aliens" will be present.
+			Level 3. At any moment keep at least one ball alive. "Stations", "ice" and "aliens" will be present.
 
 III. Blocks:
 -- Some are able to drop power-ups when they are cleared.
