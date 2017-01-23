@@ -13,7 +13,15 @@ public class PowerUp extends ImageView{
 	
 	private int option;
 	
-	// Initialize power-up position at the block that is being cleared
+	/**
+	 * Initialize power-up position at the block that is being cleared.
+	 * Level 1 and 2: Everything possible except Aliens and Snowflake.
+	 * Level 3: Aliens present.
+	 * Level 4: Snowflake present.
+	 * @param x
+	 * @param y
+	 * @param level
+	 */
 	public PowerUp(double x, double y, int level){
 		super();
 		if (level == 3){
@@ -36,5 +44,5 @@ public class PowerUp extends ImageView{
 	public void drop(){
 		setY(getY() + POWERUP_SPEED * SECOND_DELAY);
 	}
-	
+
 }

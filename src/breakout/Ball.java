@@ -6,14 +6,12 @@ import javafx.scene.image.ImageView;
 
 public class Ball extends ImageView{
 	public static final String BALL_IMAGE = "mini.gif";
-	public static final int BOUNCER_SPEED = 370;
+	public static final int BOUNCER_SPEED = 260;
 	public static final int FRAMES_PER_SECOND = 60;
 	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-	public double dx, dy;
-	public static final int DIFF = 50;
+	public static final double SLOWDOWN = .5, SPEEDUP = 2, REVERSE = -1;;
 	
-	private double angle = 0.25*Math.PI + 0.5*Math.PI*Math.random();
-	private int speed = BOUNCER_SPEED;
+	private double dx, dy;
 	
 	public Ball(Scene scene){
 		super();
@@ -21,34 +19,42 @@ public class Ball extends ImageView{
 		setImage(image);
 		setX(200);
     	setY(465);
-    	dx = Math.cos(angle) * speed;
-    	dy = Math.sin(angle) * speed;
+    	double angle = 0.25*Math.PI + 0.5*Math.PI*Math.random();
+    	dx = Math.cos(angle) * BOUNCER_SPEED;
+    	dy = Math.sin(angle) * BOUNCER_SPEED;
 	}
 	
 	public void decreaseVelocity(){
-		speed -= DIFF;
+		dx *= SLOWDOWN;
+		dy *= SLOWDOWN;
 	}
 	
 	public void increaseVelocity(){
-		speed += DIFF;
+		dx *= SPEEDUP;
+		dy *= SPEEDUP;
 	}
 	
 	public void bounce(Scene scene, double radius){
 		if (getX() >= scene.getWidth() - 2*radius || getX() <= 0) {
-			dx *= -1;
+			dx *= REVERSE;
 		}
-		if (getY() <= 0 || getY() >= scene.getHeight() - 2*radius) {
-			dy *= -1;
+		if (getY() <= 0) {
+			dy *= REVERSE;
 		} 
 		setX(getX() + dx * SECOND_DELAY);
 		setY(getY() + dy * SECOND_DELAY);
 	}
 	
+	public boolean fallen(Scene scene){
+		return getY() > scene.getHeight();
+	}
+	
 	public void reverseX(){
-		dx *= -1;
+		dx *= REVERSE;
 	}
 	
 	public void reverseY(){
-		dy *= -1;
+		dy *= REVERSE;
 	}
+	
 }

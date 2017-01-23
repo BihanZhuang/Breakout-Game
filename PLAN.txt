@@ -49,6 +49,7 @@ V. Paddle abilities:
 VI. Cheat keys:
 -- "E" makes all blocks explode.
 -- "U" generates unlimited laser from the paddle.
+-- "R" resets the current level.
 -- Press numbers 1-4 to go to corresponding levels without clearing all the blocks. 
 
 VII. Extras:
