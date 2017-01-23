@@ -1,4 +1,4 @@
-Breakout Game Project by Bihan Zhuang
+Breakout Game by Bihan Zhuang
 
 To run: 
 BreakoutMain.java
