@@ -31,8 +31,9 @@ public class Help {
 		
 		Text[] rules = new Text[]{
 		    new Text("0. Press SPACE bar to launch. Use LEFT/RIGHT to move paddle."),
-			new Text("1. Rocks can only be destroyed with 4 hits!"),
+			new Text("1. Rocks can only be destroyed with 4 hits! (gives 20 pts)"),
 			new Text("But they do not need to be cleared to level up."),
+			new Text("Normal blocks give 5 points."),
 			new Text("2. Powerups: "),
 			new Text("Red -- Double paddle length"),
 			new Text("Yellow -- Decrease ball velocity"),

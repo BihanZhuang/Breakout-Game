@@ -16,6 +16,7 @@ public class Status extends HBox{
 	public static final int W = 420;
 	public static final int ROCK_POINTS = 20;
 	public static final int BLOCK_POINTS = 5;
+	public static final int STATION_POINTS = 100;
 	public static final int INSET = 4;
 	public static final int SPACING = 15;
 	
@@ -65,5 +66,9 @@ public class Status extends HBox{
 	
 	public int getCount(){
 		return count;
+	}
+	
+	public void addSPoints(){
+		points+=STATION_POINTS;
 	}
 }

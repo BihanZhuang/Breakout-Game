@@ -75,7 +75,6 @@ public class BreakoutMain extends Application {
 		myLevelMaster.step(SECOND_DELAY);
 		if (myLevelMaster.getRestartState()){
 			restartGame();
-			myLevelMaster.reverseRestartState();
 		}
 		if (myLevelMaster.levelUp()){
 			if (currentLevel < 4){

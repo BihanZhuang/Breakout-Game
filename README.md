@@ -14,6 +14,8 @@ Any known bugs, crashes, or problems:
 1) Very occasionally the ball clears some blocks that it does not hit.  
 2) Very occasionally the ball will stick to the paddle longer than expected.
    But it will soon bounce normally again.
+3) Very occasionally the velocity of the ball changes on its own and turns back to normal 
+   a few seconds later.
 
 Extra features:
 Changed/Added a few designs compared to the initial plan.
@@ -24,6 +26,8 @@ Changed/Added a few designs compared to the initial plan.
    and only needed to keep one alive at any point. (change)
 5) An end page to display statistic of the past game. (addition)
 6) Many ways to control game flow: cheat key, reset, lost-game and restart... (addition)
+7) Added special station to fuel up the ball and add 100 points. The ball will then launch
+   at a random angle different that before.
 
 Impressions:
 Definitely learned a lot during this project. It is a fairly challenging process to familiarize 

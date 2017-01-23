@@ -23,6 +23,7 @@ public class LevelGenerator {
 	public static final double CHANCE_OF_PU = 0.5;
 	public static final int BLOCK_POINTS = 5;
 	public static final int ROCK_POINTS = 20;
+	public static final int STATION_POINTS = 100;
 	public static final int W = 420;
 	
 	private Scene scene;
@@ -30,6 +31,7 @@ public class LevelGenerator {
 	private Status status;
 	private int level, puCount = PUCOUNT, numBouncers = 1, total = 0;
 	private Paddle p;
+	private Station station;
 	private Ball[] balls;
 	private ArrayList<Laser> myLasers;
 	private ArrayList<Blocks> myBlocks;
@@ -130,6 +132,25 @@ public class LevelGenerator {
 						balls[i].setX(p.getX() + p.getBoundsInLocal().getWidth()/2 - radius);
 						balls[i].setY(p.getY() - radius*2);
 					}
+					
+					// Check if entering station
+					if (station != null){
+						if (contacted(station, balls[i]) && station.getCount() == 0){
+						Ball thisBall = balls[i];
+						PauseTransition delay = new PauseTransition(Duration.seconds(2));
+						delay.setOnFinished(e -> {
+							thisBall.move();
+							station.resetCount();
+							thisBall.bounce(scene, radius);
+						});
+						delay.play();
+						balls[i].pause();
+						balls[i].bounce(scene, radius);
+						status.addSPoints();
+						total += STATION_POINTS;
+						station.addCount();
+					}
+					}
 				}
 				
 				// Laser moving and clearing blocks
@@ -151,6 +172,7 @@ public class LevelGenerator {
 					}
 					myLasers.removeAll(removeLasers);
 				}
+				
 		}
 	}
 	
@@ -161,10 +183,6 @@ public class LevelGenerator {
 	 */
 	public int getTotal(){
 		return total;
-	}
-
-	public void reverseRestartState(){
-		restart = !restart;
 	}
 	
 	public boolean getRestartState(){
@@ -196,11 +214,16 @@ public class LevelGenerator {
 		this.p = new Paddle();
 		this.myLasers = new ArrayList<Laser>();
 		this.myBlocks = setupBlocks(NUMBER_BLOCKS, NUMBER_LAYERS, level);
-    	
+		
 		root.getChildren().add(status);
     	root.getChildren().addAll(balls);
     	root.getChildren().add(p);
     	root.getChildren().addAll(myBlocks);
+    	
+		if (level == 3 || level == 4){
+			this.station = new Station();
+			root.getChildren().add(station);
+		}
 	}
 	
 	/**
@@ -245,7 +268,7 @@ public class LevelGenerator {
 		
 		// Enable shooting lasers
 		if (code == KeyCode.D && laserpowerup){
-			setTimer().setOnFinished(e -> laserpowerup = false);
+			setTimer(POWERUP_DURATION).setOnFinished(e -> laserpowerup = false);
 			Laser l = new Laser(p.getX()+p.getBoundsInLocal().getWidth()/2, 
 					p.getY()-p.getBoundsInLocal().getHeight()*1.5);
 			myLasers.add(l);
@@ -315,14 +338,15 @@ public class LevelGenerator {
 			root.getChildren().remove(pu);
 			myPUs.remove(pu);
 			
+			int time = POWERUP_DURATION;
 			// Double paddle length
 			if (optionNum == 0){
-				setTimer().setOnFinished(e -> p.normalLength());
+				setTimer(time).setOnFinished(e -> p.normalLength());
 				p.doubleLength();
 			} 
 			// Decrease ball velocity
 			else if (optionNum == 1){
-				setTimer().setOnFinished(e -> {
+				setTimer(time).setOnFinished(e -> {
 					for (Ball b : balls){
 						b.increaseVelocity();
 					}
@@ -338,17 +362,17 @@ public class LevelGenerator {
 			} 
 			// Laser enabled
 			else if (optionNum == 3){
-				setTimer().setOnFinished(e -> laserpowerup = false);
+				setTimer(time).setOnFinished(e -> laserpowerup = false);
 				laserpowerup = true;
 			}
 			// Alien -- halve paddle length
 			else if (optionNum == 4){
-				setTimer().setOnFinished(e -> p.normalLength());
+				setTimer(time).setOnFinished(e -> p.normalLength());
 				p.halveLength();
 			} 
 			// Ice -- freeze paddle
 			else if (optionNum == 5){
-				setTimer().setOnFinished(e -> p.reverseFreezeState());
+				setTimer(time).setOnFinished(e -> p.reverseFreezeState());
 				p.reverseFreezeState();
 			}
 		}
@@ -359,8 +383,8 @@ public class LevelGenerator {
 	 * 
 	 * @return
 	 */
-	private PauseTransition setTimer(){
-		PauseTransition delay = new PauseTransition(Duration.seconds(POWERUP_DURATION));
+	private PauseTransition setTimer(double time){
+		PauseTransition delay = new PauseTransition(Duration.seconds(time));
 		delay.playFromStart();
 		return delay;
 	}

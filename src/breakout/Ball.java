@@ -8,6 +8,7 @@ public class Ball extends ImageView{
 	public static final String BALL_IMAGE = "mini.gif";
 	public static final int BOUNCER_SPEED = 260;
 	public static final int FRAMES_PER_SECOND = 60;
+	public static final int PAUSE = 1;
 	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 	public static final double SLOWDOWN = .5, SPEEDUP = 2, REVERSE = -1;;
 	
@@ -19,7 +20,7 @@ public class Ball extends ImageView{
 		setImage(image);
 		setX(200);
     	setY(465);
-    	double angle = 0.25*Math.PI + 0.5*Math.PI*Math.random();
+    	double angle = 0.25 * Math.PI * (1+Math.random());
     	dx = Math.cos(angle) * BOUNCER_SPEED;
     	dy = Math.sin(angle) * BOUNCER_SPEED;
 	}
@@ -57,4 +58,14 @@ public class Ball extends ImageView{
 		dy *= REVERSE;
 	}
 	
+	public void pause(){
+		dx = 0;
+		dy = 0;
+	}
+	
+	public void move(){
+		double angle = 2 * Math.PI * Math.random();
+    	dx = Math.cos(angle) * BOUNCER_SPEED;
+    	dy = Math.sin(angle) * BOUNCER_SPEED;
+	}
 }
